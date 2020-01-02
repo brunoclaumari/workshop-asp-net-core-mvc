@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Sec17_SalesWebMvc.Models;
+using Sec17_SalesWebMvc.Models.ViewModels;
 
 namespace Sec17_SalesWebMvc.Controllers
 {
