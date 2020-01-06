@@ -1,7 +1,7 @@
 ﻿
 namespace Sec17_SalesWebMvc.Models.Enums
 {
-    public enum SalesStatus
+    public enum SaleStatus
     {
         Pending = 0,//Pendente
         Billed = 1,//Faturado
