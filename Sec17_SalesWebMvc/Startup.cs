@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Sec17_SalesWebMvc.Models;
 using Sec17_SalesWebMvc.Data;
+using Sec17_SalesWebMvc.Services;
 
 namespace Sec17_SalesWebMvc
 {
@@ -44,6 +45,8 @@ namespace Sec17_SalesWebMvc
             //Registra o nosso serviço no nosso sistema de injeção de dependencia
             //da aplicação
             services.AddScoped<SeedingService>();
+            services.AddScoped<SellerService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
