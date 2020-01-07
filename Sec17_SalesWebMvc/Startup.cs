@@ -46,6 +46,7 @@ namespace Sec17_SalesWebMvc
             //da aplicação
             services.AddScoped<SeedingService>();
             services.AddScoped<SellerService>();
+            services.AddScoped<DepartmentService>();
 
         }
 
