@@ -8,6 +8,7 @@ using Sec17_SalesWebMvc.Controllers;
 using Sec17_SalesWebMvc.Models;
 using Sec17_SalesWebMvc.Models.ViewModels;
 using Sec17_SalesWebMvc.Services.Exceptions;
+using System.Diagnostics;
 
 namespace Sec17_SalesWebMvc.Controllers
 {
@@ -47,13 +48,13 @@ namespace Sec17_SalesWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message="Id not provided!!"});
             }
 
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found!!" });
             }
 
             return View(obj);
@@ -71,13 +72,13 @@ namespace Sec17_SalesWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided!!" }); ;
             }
 
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not founded!!" }); ;
             }
 
             return View(obj);
@@ -87,13 +88,13 @@ namespace Sec17_SalesWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided!!" }); ;
             }
 
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found!!" }); ;
             }
             List<Department> departments = _departmentService.FindAll();
             SellerFormViewModel viewModel = new SellerFormViewModel
@@ -111,7 +112,7 @@ namespace Sec17_SalesWebMvc.Controllers
         {
             if (id != seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch!!" }); ;
             }
 
             try
@@ -119,14 +120,21 @@ namespace Sec17_SalesWebMvc.Controllers
                 _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (ApplicationException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message }); ;
             }
-            catch (DbConcurrencyException)
+            
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
             {
-                return BadRequest();
-            }
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
         }
     }
 }
