@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +41,7 @@ namespace Sec17_SalesWebMvc
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<Sec17_SalesWebMvcContext>(options =>
-                    options.UseMySql(Configuration.GetConnectionString("Sec17_SalesWebMvcContext"), 
+                    options.UseMySql(Configuration.GetConnectionString("Sec17_SalesWebMvcContext"),
                     builder => builder.MigrationsAssembly("Sec17_SalesWebMvc")));
 
             //Registra o nosso serviço no nosso sistema de injeção de dependencia
@@ -47,12 +49,24 @@ namespace Sec17_SalesWebMvc
             services.AddScoped<SeedingService>();
             services.AddScoped<SellerService>();
             services.AddScoped<DepartmentService>();
-
+            //-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,SeedingService seedingService)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
         {
+            //Define o padrão de localização da aplicação E.U.A.
+            var enUS = new CultureInfo("en-US");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(enUS),
+                SupportedCultures = new List<CultureInfo> { enUS },
+                SupportedUICultures = new List<CultureInfo> { enUS }
+            };
+
+            app.UseRequestLocalization(localizationOptions);
+            //-
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
